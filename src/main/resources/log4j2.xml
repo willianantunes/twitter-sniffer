@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{dd MMM HH:mm:ss,SSS} %5p [%-20c{1}] %m%n" />
+		</Console>
+	</Appenders>
+
+	<Loggers>
+		<Logger name="org.springframework" level="INFO"></Logger>
+		<Logger name="org.apache.camel" level="INFO"></Logger>
+		<Logger name="org.apache.camel.component.jpa" level="INFO"></Logger>
+		<Logger name="org.apache.camel.component.jms" level="INFO"></Logger>
+		<Logger name="org.hibernate" level="INFO"></Logger>
+		<Logger name="br.com.willianantunes.test" level="INFO"></Logger>
+
+		<Root level="INFO">
+			<AppenderRef ref="STDOUT" />
+		</Root>
+	</Loggers>
+</Configuration>

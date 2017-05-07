@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:cxf="http://camel.apache.org/schema/cxf"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd 
+       http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+	<!-- In order to decode my values stored in application.properties -->
+	<bean id="myPropertyConfigurer" class="br.com.willianantunes.test.util.DecryptPropertyConfigurer">
+		<property name="location" value="classpath:application.properties" />
+	</bean>
+	
+	<bean id="myEntityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="myPersistenceUnit" />
+	</bean>	
+	<bean id="myTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="myEntityManagerFactory" />
+	</bean>	
+	
+	<bean id="myActiveMQComponent" class="org.apache.activemq.camel.component.ActiveMQComponent">
+		<!-- http://activemq.apache.org/what-is-the-prefetch-limit-for.html -->
+		<property name="brokerURL" value="tcp://localhost:61616?jms.prefetchPolicy.all=1" />
+	</bean>
+
+	<bean id="myBeanInspector" class="br.com.willianantunes.test.bean.BeanInspector" />
+	<bean id="myTwitterRoute" class="br.com.willianantunes.test.routes.TwitterSnifferRoute" />	
+	<camelContext xmlns="http://camel.apache.org/schema/spring">				
+		<camel:routeBuilder ref="myTwitterRoute" />
+	</camelContext>	
+</beans>

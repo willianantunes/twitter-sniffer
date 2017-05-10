@@ -40,7 +40,7 @@ public class TwitterSnifferRoute extends RouteBuilder {
 
         // http://camel.apache.org/twitter.html
         // http://camel.apache.org/jpa.html
-        fromF("twitter://search?type=polling&delay=%s&keywords=%s", 5000, "#CucaVoltou")
+        fromF("twitter://search?type=polling&delay=%s&keywords=%s", 5000, "#SP1")
         	.routeId("TwitterSnifferRoute")
         	.log(LoggingLevel.DEBUG, "The user named ${body.user.name} posted the following text at ${body.createdAt}: ${body.text}")
         	.choice()
@@ -74,7 +74,7 @@ public class TwitterSnifferRoute extends RouteBuilder {
         // http://camel.apache.org/jms.html
         from("direct:informMyQueue")
         	.routeId("ProducerTweetQueueRoute")
-        	.filter(simple("${body.size} > 0"))
+        	.filter(simple("${body.size} > 15"))
         		.split(body()) // This takes our List and create one message for each element
         		.marshal(myJacksonDataFormat)
         		.convertBodyTo(String.class) // jmsMessageType=Text is also an option

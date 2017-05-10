@@ -43,20 +43,18 @@ public class TwitterSnifferRoute extends RouteBuilder {
         fromF("twitter://search?type=polling&delay=%s&keywords=%s", 5000, "#SP1")
         	.routeId("TwitterSnifferRoute")
         	.log(LoggingLevel.DEBUG, "The user named ${body.user.name} posted the following text at ${body.createdAt}: ${body.text}")
-        	.choice()
-        		.when(myExchange -> myExchange.getIn().getBody() != null)
-	        	.process(myExchange -> {
-	        		// Twitter status
-	        		Status status = myExchange.getIn().getBody(Status.class);
-	        		// My bean to be persisted        		
-	        		TwitterMessage myTwitterMessages = new TwitterMessage(status.getUser().getName(), status.getUser().getScreenName(), 
-	        				LocalDateTime.ofInstant(status.getCreatedAt().toInstant(), ZoneId.systemDefault()), status.getText());        		
-	        		// The body of the In message is assumed to be an entity bean to be persisted
-	        		myExchange.getIn().setBody(myTwitterMessages);	        		
-	        	})
-	        	// Instead of send one exchange at time I could send a list using aggregate EIP, but I'd need to set entityType=java.util.ArrayList parameter to JPA component
-	    		.to("jpa:br.com.willianantunes.test.entity.TwitterMessage")	        	
-	        	.log("Inserted new TwitterMessage with ID ${body.id}");
+        	.process(myExchange -> {
+        		// Twitter status
+        		Status status = myExchange.getIn().getBody(Status.class);
+        		// My bean to be persisted        		
+        		TwitterMessage myTwitterMessages = new TwitterMessage(status.getUser().getName(), status.getUser().getScreenName(), 
+        				LocalDateTime.ofInstant(status.getCreatedAt().toInstant(), ZoneId.systemDefault()), status.getText());        		
+        		// The body of the In message is assumed to be an entity bean to be persisted
+        		myExchange.getIn().setBody(myTwitterMessages);	        		
+        	})
+        	// Instead of send one exchange at time I could send a list using aggregate EIP, but I'd need to set entityType=java.util.ArrayList parameter to JPA component
+    		.to("jpa:br.com.willianantunes.test.entity.TwitterMessage")	        	
+        	.log("Inserted new TwitterMessage with ID ${body.id}");
         
         // http://camel.apache.org/scheduler.html
         from("scheduler://myScheduler?useFixedDelay=false&delay=10000")

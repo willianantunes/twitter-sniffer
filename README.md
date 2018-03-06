@@ -1,6 +1,8 @@
 Apache Camel laboratories 
 ===========
 
+*UPDATE:* See the latest version of this project [here](https://github.com/willianantunes/telao-interativo-sptv).
+
 It's my test project to _F5_ my mind regarding this [powerful open-source integration framework](https://github.com/apache/camel). I used the following books:
 
 - [Instant Apache Camel Messaging System](https://www.packtpub.com/application-development/instant-apache-camel-messaging-system)
